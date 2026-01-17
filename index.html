@@ -1,24 +1,189 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arre bhai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Ky dekh raha hai beta...</title>
+
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       height: 100vh;
       background: #000;
-      color: #0f0;
-      font-family: monospace;
-      display: grid;
-      place-items: center;
-      font-size: 2.2rem;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .overlay {
+      position: relative;
+      z-index: 10;
       text-align: center;
+      pointer-events: none;
+    }
+
+    .buttons {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 80px;
+      pointer-events: auto;
+    }
+
+    .btn {
+      padding: 18px 70px;
+      font-size: 2.6rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-shadow: 0 0 15px currentColor;
+      box-shadow: 0 0 35px currentColor;
+      pointer-events: auto;
+    }
+
+    .yes {
+      background: rgba(0, 255, 0, 0.2);
+      color: #0f0;
+      border: 4px solid #0f0;
+    }
+
+    .yes:hover {
+      background: rgba(0, 255, 0, 0.4);
+      transform: scale(1.12);
+      box-shadow: 0 0 70px #0f0;
+    }
+
+    .no {
+      background: rgba(255, 0, 0, 0.2);
+      color: #f00;
+      border: 4px solid #f00;
+      position: absolute;
+      transition: all 0.45s ease;
+    }
+
+    .no:hover {
+      background: rgba(255, 0, 0, 0.4);
+    }
+
+    .message {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: bold;
+      color: #0f0;
+      text-shadow: 0 0 25px #0f0;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+
+    .message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Pro Tip floating note */
+    .protip {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      background: rgba(0, 255, 0, 0.15);
+      color: #0f0;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      border: 1px solid #0f0;
+      opacity: 0.7;
+      z-index: 30;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  ky dekh raha h bhai, ja pr hilao aur so jao!!
+
+  <!-- Your video file -->
+  <video autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay">
+    <div class="buttons">
+      <button class="btn yes" id="yesBtn">YES</button>
+      <button class="btn no" id="noBtn">NO</button>
+    </div>
+  </div>
+
+  <div class="message" id="savageMessage">
+    Ky dekh raha h beta<br>hila aur so jaa 😈🔥
+  </div>
+
+  <!-- Pro Tip -->
+  <div class="protip">
+    Pro Tip: NO ko pakad nahi sakte bhai 😂
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const message = document.getElementById('savageMessage');
+
+    // YES → show savage message
+    yesBtn.addEventListener('click', () => {
+      message.classList.add('show');
+    });
+
+    // NO → run away when mouse gets close
+    document.addEventListener('mousemove', (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      const distanceX = mouseX - (rect.left + rect.width / 2);
+      const distanceY = mouseY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
+
+      if (distance < 160) {  // trigger distance (increase if too sensitive)
+        const maxX = window.innerWidth - rect.width - 80;
+        const maxY = window.innerHeight - rect.height - 80;
+
+        const newX = Math.random() * maxX + 40;
+        const newY = Math.random() * maxY + 40;
+
+        noBtn.style.left = newX + 'px';
+        noBtn.style.top = newY + 'px';
+        noBtn.style.position = 'absolute';
+        noBtn.style.transform = 'none';
+      }
+    });
+  </script>
+
 </body>
 </html>
